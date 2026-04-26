@@ -4,7 +4,7 @@
     $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($userName) . '&background=0b6b5b&color=fff';
 
     $profileLinks = [
-        ['label' => 'Akun Saya', 'icon' => 'fa-user-circle', 'href' => '#'],
+        ['label' => 'Akun Saya', 'icon' => 'fa-user-circle', 'href' => route('profile')],
         ['label' => 'Keamanan', 'icon' => 'fa-shield-alt', 'href' => '#'],
     ];
 @endphp
