@@ -1,6 +1,7 @@
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fa-house', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+        ['label' => 'Category', 'icon' => 'fa-wallet', 'href' => route('category'), 'active' => request()->routeIs('category')],
         ['label' => 'Dompet', 'icon' => 'fa-wallet', 'href' => '#', 'active' => false],
         ['label' => 'Transaksi', 'icon' => 'fa-right-left', 'href' => '#', 'active' => false],
         ['label' => 'Analisis', 'icon' => 'fa-chart-pie', 'href' => '#', 'active' => false],
