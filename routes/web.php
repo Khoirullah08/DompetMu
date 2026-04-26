@@ -42,9 +42,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/data-export',  [ProfileController::class, 'dataExport'])->name('profile.data-export');
     Route::get('/delete',       [ProfileController::class, 'deleteConfirm'])->name('profile.delete');
 
-    Route::get('/category', [CategoryController::class, 'index'])->name('category');
-    Route::get('/category/tambah', [CategoryController::class, 'create'])->name('category.create');
-    Route::get('/category/edit/$id', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::post('/category/update/$id', [CategoryController::class, 'update'])->name('category.update');
-    Route::post('/category/delete/$id', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::prefix('category')->name('category.')->group(function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::get('/create', [CategoryController::class, 'create'])->name('create');
+        Route::post('/store', [CategoryController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [CategoryController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('delete');
+    });
+    
+
 });

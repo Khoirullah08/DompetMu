@@ -24,22 +24,33 @@ class CategoryController extends Controller
         return view('category.create', compact('title', 'subtitle'));
     }
 
-    public function store(Request $request) {
-         $validated = $request->validate([ 
-            'nama' => ['required', 'string'],
-            'tipe' => ['required', Rule::in('pemasukan', 'pengeluarans')]
-         ]);
+   public function store(Request $request) 
+    {
+        $validated = $request->validate([ 
+            'nama' => ['required', 'string', 'max:255'],
+            'tipe' => ['required', \Illuminate\Validation\Rule::in(['pemasukan', 'pengeluarans'])]
+        ]);
 
-         Category::create([
-            'nama' => $request->nama,
-            'tipe' => $request->tipe
-         ]);         
+        try {
+            Kategori::create([
+                'nama' => $validated['nama'],
+                'tipe' => $validated['tipe']
+            ]);
+            return redirect()
+                    ->route('category.index')
+                    ->with('success', 'Kategori ' . $request->nama . ' berhasil disimpan!');
+        } catch (\Exception $e) {
+            return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
     }
 
     public function edit(){
         $title = 'Kategori';
         $subtitle = 'Halaman Kategori';
-        
+
         return view('category.index', compact('title', 'subtitle'));
     }
 
