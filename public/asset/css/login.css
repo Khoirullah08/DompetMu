@@ -163,3 +163,29 @@
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
     .card-wrapper { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+
+    /* Error states */
+    .input-field.border-red-400 {
+      border-color: #f87171;
+      background: rgba(254, 242, 242, 0.7);
+    }
+    .input-field.border-red-400 svg {
+      stroke: #ef4444;
+    }
+
+    /* Error message alert */
+    .bg-red-50 {
+      background: rgba(254, 242, 242, 0.8);
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
+  <title>Masuk</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{asset('asset/css/login.css')}}">
@@ -52,29 +52,45 @@
 
       <!-- Heading -->
       <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 mb-2 tracking-tight">Masuk Dengan Email</h1>
-        <p class="text-gray-500 text-sm leading-relaxed">Make a new doc to bring your words, data,<br/>and teams together. For free</p>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2 tracking-tight">Masuk ke Duit Mu mas</h1>
+        <p class="text-gray-500 text-sm leading-relaxed">Kelola keuangan Anda dengan mudah.<br/>Pantau, catat, dan rencanakan pengeluaran.</p>
       </div>
+
+      <!-- Error Alert -->
+      @if ($errors->any())
+        <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
+          <div class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-red-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+            <div class="text-sm text-red-700">
+              @foreach ($errors->all() as $error)
+                <p>{{ $error }}</p>
+              @endforeach
+            </div>
+          </div>
+        </div>
+      @endif
 
       <!-- Form -->
       <form action="{{ route('login') }}" method="POST" class="space-y-3">
+        @csrf
 
         <!-- Email -->
-        <div class="input-field flex items-center gap-3 rounded-xl px-4 py-3">
+        <div class="input-field flex items-center gap-3 rounded-xl px-4 py-3 @error('email') border-red-400 bg-red-50 @enderror">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
             <rect x="2" y="4" width="20" height="16" rx="2"/>
             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
           </svg>
-          <input type="email" name="email" placeholder="Email" />
+          <input type="email" name="email" placeholder="Email Anda" value="{{ old('email') }}" />
         </div>
-
         <!-- Password -->
-        <div class="input-field flex items-center gap-3 rounded-xl px-4 py-3">
+        <div class="input-field flex items-center gap-3 rounded-xl px-4 py-3 @error('password') border-red-400 bg-red-50 @enderror">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
             <rect x="3" y="11" width="18" height="11" rx="2"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
-          <input type="password" name="password" id="pwdInput" placeholder="Password" />
+          <input type="password" name="password" id="pwdInput" placeholder="Kata Sandi" />
           <button id="togglePwd" type="button" class="shrink-0 ml-auto" onclick="togglePassword()">
             <svg id="eyeOff" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
@@ -91,19 +107,19 @@
 
         <!-- Forgot password -->
         <div class="text-right">
-          <a href="#" class="text-sm text-gray-500 hover:text-gray-800 transition-colors font-medium">Forgot password?</a>
+          <a href="#" class="text-sm text-gray-500 hover:text-gray-800 transition-colors font-medium">Lupa kata sandi?</a>
         </div>
 
         <!-- CTA Button -->
         <button class="btn-primary w-full rounded-xl py-3.5 text-white font-semibold text-sm tracking-wide mt-1">
-          Get Started
+          Masuk
         </button>
       </form>
 
       <!-- Divider -->
       <div class="flex items-center gap-3 my-5">
         <div class="flex-1 h-px bg-gray-200/70"></div>
-        <span class="text-xs text-gray-400 font-medium">Or sign in with</span>
+        <span class="text-xs text-gray-400 font-medium">Atau masuk dengan</span>
         <div class="flex-1 h-px bg-gray-200/70"></div>
       </div>
 
@@ -130,8 +146,8 @@
 
          <!-- Sign uplink -->
       <p class="text-center text-sm text-gray-400 mt-5">
-        Don't have an account?
-        <a href="{{ route('register') }}" class="text-gray-800 font-semibold hover:underline ml-1">Sign up</a>
+        Belum punya akun?
+        <a href="{{ route('register') }}" class="text-gray-800 font-semibold hover:underline ml-1">Daftar</a>
       </p>
 
 

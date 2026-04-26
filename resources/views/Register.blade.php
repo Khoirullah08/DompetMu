@@ -53,8 +53,8 @@
 
       <!-- Heading -->
       <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 mb-2 tracking-tight">Create your account</h1>
-        <p class="text-gray-500 text-sm leading-relaxed">Make a new doc to bring your words, data,<br/>and teams together. For free</p>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2 tracking-tight">Buat Akun Duit Mu mas</h1>
+        <p class="text-gray-500 text-sm leading-relaxed">Mulai kelola keuangan Anda sekarang.<br/>Gratis, aman, dan mudah digunakan.</p>
       </div>
 
       <!-- Fields -->
@@ -67,7 +67,7 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-          <input type="text" name="name" placeholder="Full name" />
+          <input type="text" name="name" placeholder="Nama Lengkap" />
         </div>
 
         <!-- Email -->
@@ -76,7 +76,7 @@
             <rect x="2" y="4" width="20" height="16" rx="2"/>
             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
           </svg>
-          <input type="email" name="email" placeholder="Email address" />
+          <input type="email" name="email" placeholder="Email Anda" />
         </div>
 
         <!-- Password -->
@@ -85,7 +85,7 @@
             <rect x="3" y="11" width="18" height="11" rx="2"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
-          <input type="password" id="password" name="password" placeholder="Password" />
+          <input type="password" id="password" name="password" placeholder="Kata Sandi" />
           <button type="button" class="toggle-pwd shrink-0 ml-auto" onclick="togglePass('password', 'eye1Off', 'eye1On')">
             <svg id="eye1Off" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
@@ -105,7 +105,7 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          <input type="password" id="confirmPassword" name="password_confirmation" placeholder="Confirm password" />
+          <input type="password" id="confirmPassword" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" />
           <button type="button" class="toggle-pwd shrink-0 ml-auto" onclick="togglePass('confirmPassword', 'eye2Off', 'eye2On')">
             <svg id="eye2Off" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
@@ -122,7 +122,7 @@
 
         <!-- CTA -->
         <button class="btn-primary w-full rounded-xl py-3.5 text-white font-semibold text-sm tracking-wide">
-            Create Account
+            Daftar Sekarang
         </button>
         
     </form>
@@ -132,7 +132,7 @@
       <!-- Divider -->
       <div class="flex items-center gap-3 my-5">
         <div class="flex-1 h-px bg-gray-200/70"></div>
-        <span class="text-xs text-gray-400 font-medium">Or sign up with</span>
+        <span class="text-xs text-gray-400 font-medium">Atau daftar dengan</span>
         <div class="flex-1 h-px bg-gray-200/70"></div>
       </div>
 
@@ -158,8 +158,8 @@
 
       <!-- Sign in link -->
       <p class="text-center text-sm text-gray-400 mt-5">
-        Already have an account?
-        <a href="{{ route('login') }}" class="text-gray-800 font-semibold hover:underline ml-1">Sign in</a>
+        Sudah punya akun?
+        <a href="{{ route('login') }}" class="text-gray-800 font-semibold hover:underline ml-1">Masuk</a>
       </p>
 
     </div>
