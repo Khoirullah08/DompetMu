@@ -3,7 +3,8 @@
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;  
 use App\Http\Controllers\DashboardController; 
-use App\Http\Controllers\ProfileController; 
+use App\Http\Controllers\ProfileController;  
+use App\Http\Controllers\CategoryController;  
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,4 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/data-export',  [ProfileController::class, 'dataExport'])->name('profile.data-export');
     Route::get('/delete',       [ProfileController::class, 'deleteConfirm'])->name('profile.delete');
 
+    Route::get('/category', [CategoryController::class, 'index'])->name('category');
+    Route::get('/category/tambah', [CategoryController::class, 'create'])->name('category.create');
+    Route::get('/category/edit/$id', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::post('/category/update/$id', [CategoryController::class, 'update'])->name('category.update');
+    Route::post('/category/delete/$id', [CategoryController::class, 'delete'])->name('category.delete');
 });
