@@ -57,7 +57,7 @@
       </div>
 
       <!-- Form -->
-      <form action="#" method="POST" class="space-y-3">
+      <form action="{{ route('login') }}" method="POST" class="space-y-3">
 
         <!-- Email -->
         <div class="input-field flex items-center gap-3 rounded-xl px-4 py-3">
@@ -65,7 +65,7 @@
             <rect x="2" y="4" width="20" height="16" rx="2"/>
             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
           </svg>
-          <input type="email" placeholder="Email" />
+          <input type="email" name="email" placeholder="Email" />
         </div>
 
         <!-- Password -->
@@ -74,7 +74,7 @@
             <rect x="3" y="11" width="18" height="11" rx="2"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
-          <input type="password" id="pwdInput" placeholder="Password" />
+          <input type="password" name="password" id="pwdInput" placeholder="Password" />
           <button id="togglePwd" type="button" class="shrink-0 ml-auto" onclick="togglePassword()">
             <svg id="eyeOff" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
@@ -127,6 +127,13 @@
         </button>
         
       </div>
+
+         <!-- Sign uplink -->
+      <p class="text-center text-sm text-gray-400 mt-5">
+        Don't have an account?
+        <a href="{{ route('register') }}" class="text-gray-800 font-semibold hover:underline ml-1">Sign up</a>
+      </p>
+
 
     </div>
   </div>

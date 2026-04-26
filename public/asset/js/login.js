@@ -1,3 +1,4 @@
+ // Toggle eye Password 
  function togglePassword() {
      const input = document.getElementById('pwdInput');
      const eyeOff = document.getElementById('eyeOff');
