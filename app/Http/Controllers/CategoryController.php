@@ -51,7 +51,9 @@ class CategoryController extends Controller
         $title = 'Kategori';
         $subtitle = 'Halaman Kategori';
 
-        return view('category.index', compact('title', 'subtitle'));
+        $category = Category::findOrfail($id);
+
+        return view('category.edit', compact('title', 'subtitle', 'category'));
     }
 
     public function update($id) {
@@ -60,10 +62,22 @@ class CategoryController extends Controller
             'tipe' => ['required', Rule::in('pemasukan', 'pengeluarans')]
          ]);
 
-        $update = DB::table('kategori')->where('id', $id)->update([
-            'nama' => $request->nama,
-            'tipe' => $request->tipe
-        ]);
+        try {
+             $update = DB::table('kategori')->where('id', $id)->update([
+                'nama' => $request->nama,
+                'tipe' => $request->tipe
+            ]);
+
+          return redirect()
+                    ->route('category.index',)
+                    ->with('success', 'Kategori berhasil diedit!');
+        }catch(\Exception $e) {
+               return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
+       
     }
 
     public function destroy($id) {

@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="col-span-2 flex justify-end items-center gap-2">
-                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100">
+                    <a href="{{route('category.edit' $c->id)}}" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100">
                         <i class="fas fa-edit text-sm"></i>
                     </a>
                     <button class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100">

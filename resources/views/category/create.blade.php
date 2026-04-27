@@ -39,7 +39,7 @@
                                 class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 outline-none transition @error('tipe') border-red-400 @enderror">
                             <option value="" disabled selected>Pilih tipe...</option>
                             <option value="pemasukan" {{ old('tipe') == 'pemasukan' ? 'selected' : '' }}>Pemasukan</option>
-                            <option value="pengeluarans" {{ old('tipe') == 'pengeluarans' ? 'selected' : '' }}>Pengeluaran</option>
+                            <option value="pengeluaran" {{ old('tipe') == 'pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
                         </select>
                         @error('tipe')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
