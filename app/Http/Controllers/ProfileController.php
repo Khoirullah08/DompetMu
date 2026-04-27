@@ -45,15 +45,6 @@ class ProfileController extends Controller
         return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui!');
     }
 
-    public function security()   { return view('profile.security'); }
-    public function teams()      { return view('profile.teams'); }
-    public function teamMember() { return view('profile.team-member'); }
-    public function notifications() { return view('profile.notifications'); }
-    public function billing()    { return view('profile.billing'); }
-    public function dataExport() { return view('profile.data-export'); }
-    public function deleteConfirm() { return view('profile.delete'); }
-
-
 
     // DELETE /profile
     public function destroy()
