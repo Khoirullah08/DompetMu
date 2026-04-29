@@ -1,11 +1,11 @@
 @php
-    $userName = 'Budi Santoso';
-    $userEmail = 'budi.dev@rumahkode.id';
+    $userName  = Auth::user()->name;
+    $userEmail = Auth::user()->email;
     $avatarUrl = 'https://ui-avatars.com/api/?name=' . urlencode($userName) . '&background=0b6b5b&color=fff';
 
     $profileLinks = [
         ['label' => 'Akun Saya', 'icon' => 'fa-user-circle', 'href' => route('profile')],
-        ['label' => 'Keamanan', 'icon' => 'fa-shield-alt', 'href' => '#'],
+        ['label' => 'Keamanan',  'icon' => 'fa-shield-alt',  'href' => '#'],
     ];
 @endphp
 
@@ -16,11 +16,24 @@
     </div>
 
     <div class="flex items-center gap-4 pt-1 lg:gap-6">
+
+        {{-- Tombol Admin Panel hanya muncul kalau role admin --}}
+        @if (Auth::user()->role === 'admin')
+            <a href="{{ route('admin.index') }}"
+               class="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+               style="background: var(--brand)">
+                <i class="fa-solid fa-shield-halved text-sm"></i>
+                <span class="hidden lg:inline">Admin Panel</span>
+            </a>
+        @endif
+
+        {{-- Notifikasi --}}
         <button type="button" class="relative text-slate-400 transition hover:text-[#0b6b5b]">
             <i class="far fa-bell text-xl"></i>
             <span class="absolute -right-1 -top-1 h-2 w-2 rounded-full border-2 border-white bg-red-500"></span>
         </button>
 
+        {{-- Profile Dropdown --}}
         <div class="relative">
             <button id="profileBtn" type="button" class="group flex items-center gap-3 rounded-full focus:outline-none">
                 <img src="{{ $avatarUrl }}" alt="{{ $userName }}" class="h-10 w-10 rounded-full border-2 border-emerald-50 transition group-hover:border-[#0b6b5b]">
@@ -42,6 +55,14 @@
                         {{ $link['label'] }}
                     </a>
                 @endforeach
+
+                @if (Auth::user()->role === 'admin')
+                    <hr class="my-2 border-slate-50">
+                    <a href="{{ route('admin.index') }}" class="flex items-center gap-3 px-4 py-2 text-sm font-semibold transition hover:bg-emerald-50" style="color: var(--brand)">
+                        <i class="fa-solid fa-shield-halved w-5"></i>
+                        Admin Panel
+                    </a>
+                @endif
 
                 <hr class="my-2 border-slate-50">
 
