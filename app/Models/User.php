@@ -30,4 +30,9 @@ class User extends Authenticatable
     // Model User 
      protected $fillable = ['name', 'email', 'role', 'password'];
      protected $hidden = ['password', 'remember_token'];
+
+    public function kategori()
+    {
+        return $this->hasMany(Kategori::class);
     }
+}

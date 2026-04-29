@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kategori;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
@@ -13,7 +14,8 @@ class CategoryController extends Controller
         $title = 'Kategori';
         $subtitle = 'Halaman Kategori';
 
-        $category = Kategori::all();
+        $id = Auth::id();
+        $category = Kategori::where('user_id', $id)->get();
         return view('category.index', compact('title', 'subtitle', 'category'));
     }
 
@@ -34,7 +36,8 @@ class CategoryController extends Controller
         try {
             Kategori::create([
                 'nama' => $validated['nama'],
-                'tipe' => $validated['tipe']
+                'tipe' => $validated['tipe'],
+                'user_id' => Auth::id()
             ]);
             return redirect()
                     ->route('category.index')
@@ -51,7 +54,9 @@ class CategoryController extends Controller
         $title = 'Kategori';
         $subtitle = 'Halaman Kategori';
 
-        $category = Category::findOrfail($id);
+        $category = Kategori::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
 
         return view('category.edit', compact('title', 'subtitle', 'category'));
     }
