@@ -18,7 +18,7 @@ class ProfileController extends Controller
         ];
 
         $user = Auth::user();
-        return view('profil', compact('user','summary'));
+        return view('profile', compact('user','summary'));
     }
 
     // GET /profile/edit

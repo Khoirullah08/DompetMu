@@ -11,7 +11,6 @@
     align-items: flex-start;
   }
 
-  /* ACCOUNT SETTINGS SIDEBAR */
   .account-sidebar {
     width: 220px;
     background: #ffffff;
@@ -52,10 +51,10 @@
   }
 
   .account-nav-item.active {
-    color: #2563eb;
+    color: #0D7F6A;
     font-weight: 500;
     background: #eff6ff;
-    border-right-color: #2563eb;
+    border-right-color: #0D7F6A;
   }
 
   .account-nav-item.danger {
@@ -67,7 +66,6 @@
     background: #fef2f2;
   }
 
-  /* MAIN PROFILE CONTENT */
   .profile-main {
     flex: 1;
     min-width: 0;
@@ -106,7 +104,7 @@
     align-items: center;
     gap: 5px;
     font-size: 13px;
-    color: #2563eb;
+    color: #0D7F6A;
     font-weight: 500;
     background: none;
     border: none;
@@ -118,10 +116,9 @@
     transition: background 0.15s;
   }
 
-  .btn-edit:hover { background: #eff6ff; color: #2563eb; }
+  .btn-edit:hover { background: #eff6ff; color: #0D7F6A; }
   .btn-edit svg { width: 13px; height: 13px; }
 
-  /* AVATAR ROW */
   .avatar-row {
     display: flex;
     align-items: center;
@@ -132,7 +129,7 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%);
+    background: linear-gradient(135deg, #34d399 0%, #0D7F6A 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -166,7 +163,6 @@
 
   .avatar-location svg { width: 12px; height: 12px; }
 
-  /* FIELDS GRID */
   .fields-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -189,7 +185,6 @@
     color: #374151;
   }
 
-  /* SUCCESS ALERT */
   .alert-success {
     background: #f0fdf4;
     border: 1px solid #bbf7d0;
@@ -202,6 +197,86 @@
     align-items: center;
     gap: 8px;
   }
+
+  .edit-form {
+    display: none;
+  }
+
+  .edit-form.active {
+    display: block;
+  }
+
+  .view-mode.hidden {
+    display: none;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13.5px;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-family: inherit;
+    background: #f9fafb;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #3B9788;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: #fff;
+  }
+
+  textarea.form-input {
+    resize: vertical;
+    min-height: 72px;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: flex-end;
+  }
+
+  .btn-save {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    background: #0D7F6A;
+    border: none;
+    cursor: pointer;
+    padding: 7px 16px;
+    border-radius: 7px;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+
+  .btn-save:hover { background: #227264; }
+
+  .btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    background: none;
+    border: 1px solid #A7B3C4;
+    cursor: pointer;
+    padding: 7px 16px;
+    border-radius: 7px;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .btn-cancel:hover { background: #f9fafb; color: #374151; }
 </style>
 @endsection
 
@@ -218,7 +293,6 @@
 
 <div class="profile-wrapper">
 
-  {{-- ACCOUNT SETTINGS SIDEBAR --}}
   <aside class="account-sidebar">
     <div class="account-sidebar-title">Account Settings</div>
 
@@ -226,60 +300,15 @@
        class="account-nav-item {{ request()->routeIs('profile') ? 'active' : '' }}">
       My Profile
     </a>
-
-    <a href="{{ route('profile.security') }}"
-       class="account-nav-item {{ request()->routeIs('profile.security') ? 'active' : '' }}">
-      Security
-    </a>
-
-    <a href="{{ route('profile.teams') }}"
-       class="account-nav-item {{ request()->routeIs('profile.teams') ? 'active' : '' }}">
-      Teams
-    </a>
-
-    <a href="{{ route('profile.team-member') }}"
-       class="account-nav-item {{ request()->routeIs('profile.team-member') ? 'active' : '' }}">
-      Team Member
-    </a>
-
-    <a href="{{ route('profile.notifications') }}"
-       class="account-nav-item {{ request()->routeIs('profile.notifications') ? 'active' : '' }}">
-      Notifications
-    </a>
-
-    <a href="{{ route('profile.billing') }}"
-       class="account-nav-item {{ request()->routeIs('profile.billing') ? 'active' : '' }}">
-      Billing
-    </a>
-
-    <a href="{{ route('profile.data-export') }}"
-       class="account-nav-item {{ request()->routeIs('profile.data-export') ? 'active' : '' }}">
-      Data Export
-    </a>
-
-    <a href="{{ route('profile.delete') }}"
-       class="account-nav-item danger {{ request()->routeIs('profile.delete') ? 'active' : '' }}">
-      Delete Account
-    </a>
   </aside>
 
-  {{-- MAIN CONTENT --}}
   <div class="profile-main">
-    <h2 class="profile-section-title">My Profile</h2>
-
-    {{-- Profile Card --}}
     <div class="profile-card">
       <div class="profile-card-header">
         <span class="profile-card-title">My Profile</span>
-        <a href="{{ route('profile.edit') }}" class="btn-edit">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-          Edit
-        </a>
       </div>
       <div class="avatar-row">
+
         <div class="avatar-circle">
           {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}{{ strtoupper(substr(strstr(auth()->user()->name, ' '), 1, 1)) }}
         </div>
@@ -297,78 +326,105 @@
       </div>
     </div>
 
-    {{-- Personal Information Card --}}
     <div class="profile-card">
       <div class="profile-card-header">
         <span class="profile-card-title">Personal Information</span>
-        <a href="{{ route('profile.edit') }}" class="btn-edit">
+        <button type="button" class="btn-edit" onclick="toggleEdit('personal')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
           </svg>
           Edit
-        </a>
+        </button>
       </div>
-      <div class="fields-grid">
-        <div>
-          <div class="field-label">First Name</div>
-          <div class="field-value">{{ explode(' ', auth()->user()->name)[0] }}</div>
+
+      <div id="personal-view" class="view-mode">
+        <div class="fields-grid">
+          <div>
+            <div class="field-label">Nama</div>
+            <div class="field-value" id="display-firstname">{{ explode(' ', auth()->user()->name)[0] }}</div>
+          </div>
+          <div>
+            <div class="field-label">Alamat</div>
+            <div class="field-value" id="display-lastname">{{ explode(' ', auth()->user()->name)[1] ?? '-' }}</div>
+          </div>
+          <div>
+            <div class="field-label">Email</div>
+            <div class="field-value" id="display-email">{{ auth()->user()->email }}</div>
+          </div>
+          <div>
+            <div class="field-label">No Telpon</div>
+            <div class="field-value" id="display-phone">{{ auth()->user()->phone ?? '-' }}</div>
+          </div>
+          <div class="field-full">
+            <div class="field-label">Bio</div>
+            <div class="field-value" id="display-bio">{{ auth()->user()->bio ?? '-' }}</div>
+          </div>
         </div>
-        <div>
-          <div class="field-label">Last Name</div>
-          <div class="field-value">{{ explode(' ', auth()->user()->name)[1] ?? '-' }}</div>
-        </div>
-        <div>
-          <div class="field-label">Email Address</div>
-          <div class="field-value">{{ auth()->user()->email }}</div>
-        </div>
-        <div>
-          <div class="field-label">Phone</div>
-          <div class="field-value">{{ auth()->user()->phone ?? '-' }}</div>
-        </div>
-        <div class="field-full">
-          <div class="field-label">Bio</div>
-          <div class="field-value">{{ auth()->user()->bio ?? '-' }}</div>
-        </div>
+      </div>
+
+      <div id="personal-edit" class="edit-form">
+        <form method="POST" action="{{ route('profile.update') }}">
+          @csrf
+          @method('PUT')
+          <input type="hidden" name="section" value="personal">
+          <div class="fields-grid">
+            <div>
+              <div class="field-label">Nama</div>
+              <input type="text" name="first_name" class="form-input"
+                value="{{ explode(' ', auth()->user()->name)[0] }}" placeholder="Nama">
+            </div>
+            <div>
+              <div class="field-label">Alamat</div>
+              <input type="text" name="last_name" class="form-input"
+                value="{{ explode(' ', auth()->user()->alamat)[1] ?? '' }}" placeholder="Alamat">
+            </div>
+            <div>
+              <div class="field-label">Email</div>
+              <input type="email" name="email" class="form-input"
+                value="{{ auth()->user()->email }}" placeholder="Email">
+            </div>
+            <div>
+              <div class="field-label">No Telpon</div>
+              <input type="text" name="phone" class="form-input"
+                value="{{ auth()->user()->phone ?? '' }}" placeholder="No Telpon">
+            </div>
+            <div class="field-full">
+              <div class="field-label">Bio</div>
+              <textarea name="bio" class="form-input" placeholder="Tell us about yourself">{{ auth()->user()->bio ?? '' }}</textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="cancelEdit('personal')">Cancel</button>
+            <button type="submit" class="btn-save">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Save Changes
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-
-    {{-- Address Card --}}
-    <div class="profile-card">
-      <div class="profile-card-header">
-        <span class="profile-card-title">Address</span>
-        <a href="{{ route('profile.edit') }}" class="btn-edit">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-          Edit
-        </a>
-      </div>
-      <div class="fields-grid">
-        <div>
-          <div class="field-label">Country</div>
-          <div class="field-value">{{ auth()->user()->country ?? '-' }}</div>
-        </div>
-        <div>
-          <div class="field-label">City/State</div>
-          <div class="field-value">{{ auth()->user()->city ?? '-' }}</div>
-        </div>
-        <div>
-          <div class="field-label">Postal Code</div>
-          <div class="field-value">{{ auth()->user()->postal_code ?? '-' }}</div>
-        </div>
-        <div>
-          <div class="field-label">TAX ID</div>
-          <div class="field-value">{{ auth()->user()->tax_id ?? '-' }}</div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
 @endsection
 
 @section('scripts')
+<script>
+  function toggleEdit(section) {
+    const view = document.getElementById(section + '-view');
+    const edit = document.getElementById(section + '-edit');
+    view.classList.add('hidden');
+    edit.classList.add('active');
+  }
+
+  function cancelEdit(section) {
+    const view = document.getElementById(section + '-view');
+    const edit = document.getElementById(section + '-edit');
+    view.classList.remove('hidden');
+    edit.classList.remove('active');
+  }
+</script>
 @endsection
