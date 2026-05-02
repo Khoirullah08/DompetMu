@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Kategori;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
@@ -26,11 +27,11 @@ class CategoryController extends Controller
         return view('category.create', compact('title', 'subtitle'));
     }
 
-   public function store(Request $request) 
+   public function store(Request $request,) 
     {
         $validated = $request->validate([ 
             'nama' => ['required', 'string', 'max:255'],
-            'tipe' => ['required', \Illuminate\Validation\Rule::in(['pemasukan', 'pengeluarans'])]
+            'tipe' => ['required', \Illuminate\Validation\Rule::in(['pemasukan', 'pengeluaran'])]
         ]);
 
         try {
@@ -50,7 +51,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function edit(){
+    public function edit($id){
         $title = 'Kategori';
         $subtitle = 'Halaman Kategori';
 
@@ -61,10 +62,10 @@ class CategoryController extends Controller
         return view('category.edit', compact('title', 'subtitle', 'category'));
     }
 
-    public function update($id) {
+    public function update(Request $request, $id) {
         $validated = $request->validate([ 
             'nama' => ['required', 'string'],
-            'tipe' => ['required', Rule::in('pemasukan', 'pengeluarans')]
+            'tipe' => ['required', Rule::in('pemasukan', 'pengeluaran')]
          ]);
 
         try {
