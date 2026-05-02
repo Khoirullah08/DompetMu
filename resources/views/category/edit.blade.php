@@ -17,8 +17,7 @@
         <div class="bg-white border border-slate-200 rounded-xl p-8">
             <form action="{{ route('category.update', $category->id) }}" method="POST">
                 @csrf
-                @method('PUT')
-
+                
                 <div class="space-y-6">
                     <div>
 
@@ -42,7 +41,7 @@
                                 class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 outline-none transition @error('tipe') border-red-400 @enderror">
                             <option value="" disabled selected>Pilih tipe...</option>
                             <option value="pemasukan" {{ old('tipe', $category->tipe) == 'pemasukan' ? 'selected' : '' }}>Pemasukan</option>
-                            <option value="pengeluarans" {{ old('tipe', $category->tipe) == 'pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
+                            <option value="pengeluaran" {{ old('tipe', $category->tipe) == 'pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
                         </select>
 
                         @error('tipe')
