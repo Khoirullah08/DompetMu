@@ -4,55 +4,42 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    // GET /profile
     public function index()
     {
-         $summary = [
-            'title' => 'Profil Mu',
-            'subtitle' => 'Kelola profil mu.',
-
-        ];
-
-        $user = Auth::user();
-        return view('profile', compact('user','summary'));
+        return view('profile.index');
     }
 
-    // GET /profile/edit
     public function edit()
     {
-        $user = Auth::user();
-        return view('profile.edit', compact('user'));
+        return view('profile.edit');
     }
 
-    // PUT /profile/update
     public function update(Request $request)
     {
-        $user = Auth::user();
-
-        $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
-            'bio'   => 'nullable|string|max:500',
+        $validated = $request->validate([
+            'name'   => ['required', 'string', 'max:255'],
+            'alamat' => ['nullable', 'string', 'max:255'],
+            'email'  => ['required', 'email', 'unique:users,email,' . Auth::id()],
+            'phone'  => ['nullable', 'string', 'max:20'],
+            'bio'    => ['nullable', 'string', 'max:500'],
         ]);
 
-        $user->update($request->only('name', 'email', 'phone', 'bio'));
+        Auth::user()->update($validated);
 
-        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui!');
+        return redirect()
+            ->route('profile')
+            ->with('success', 'Profil berhasil diperbarui!');
     }
 
-
-    // DELETE /profile
     public function destroy()
     {
         $user = Auth::user();
         Auth::logout();
         $user->delete();
 
-        return redirect('/')->with('success', 'Akun berhasil dihapus.');
+        return redirect()->route('login')->with('success', 'Akun berhasil dihapus.');
     }
 }

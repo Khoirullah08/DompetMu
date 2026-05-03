@@ -32,11 +32,12 @@ Route::post('/logout', [LoginController::class, 'destroy'])
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    Route::get('/profile',         [ProfileController::class, 'index'])->name('profile');
-    Route::get('/profile/edit',    [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/update',  [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile',      [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+// Profile routes
+    Route::get('/profile',        [ProfileController::class, 'index'])->name('profile');
+    Route::get('/profile/edit',   [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('category')->name('category.')->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('index');
