@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="col-span-3">
-                    @if($c->tipe == 'Pemasukan')
+                    @if($c->tipe == 'pemasukan')
                         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500 text-white text-[10px] font-black uppercase tracking-wider shadow-lg shadow-emerald-100">
                             <i class="fas fa-check-circle"></i>
                             {{ $c->tipe }}

@@ -1,8 +1,8 @@
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fa-house', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-        ['label' => 'Category', 'icon' => 'fa-wallet', 'href' => route('category.index'), 'active' => request()->routeIs('category')],
-        ['label' => 'Dompet', 'icon' => 'fa-wallet', 'href' => '#', 'active' => false],
+        ['label' => 'Category', 'icon' => 'fa-folder', 'href' => route('category.index'), 'active' => request()->routeIs('category.*')],
+        ['label' => 'Dompet', 'icon' => 'fa-wallet', 'href' => route('dompet.index'), 'active' => request()->routeIs('dompet.*')],
         ['label' => 'Transaksi', 'icon' => 'fa-right-left', 'href' => '#', 'active' => false],
         ['label' => 'Analisis', 'icon' => 'fa-chart-pie', 'href' => '#', 'active' => false],
     ];
