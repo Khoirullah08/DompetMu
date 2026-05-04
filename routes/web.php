@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DompetController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -57,4 +58,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('/delete/{id}', [DompetController::class, 'delete'])->name('delete');
     });
 
+    // Transaksi routes 
+    Route::prefix('transaksi')->name('transaksi.')->group(function () {
+        Route::get('/',           [TransaksiController::class, 'index'])->name('index');
+        Route::get('/create',     [TransaksiController::class, 'create'])->name('create');
+        Route::post('/store',     [TransaksiController::class, 'store'])->name('store');
+        Route::get('/edit/{id}',  [TransaksiController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}',[TransaksiController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [TransaksiController::class, 'destroy'])->name('delete');
+    });
 });

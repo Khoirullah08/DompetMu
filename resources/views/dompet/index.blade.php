@@ -147,7 +147,6 @@
 @include('dompet._delete')
 
 @endsection
-
 @section('scripts')
     <script>
             function openDeleteModal(actionUrl) {
