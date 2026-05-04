@@ -94,8 +94,8 @@ class DompetController extends Controller
                 ->withinput()
                 ->with(
                     "error",
-                    "Terjadi Keasalahan Saat Memperbarui Dompet " .
-                        $dompet->nama,
+                    "Terjadi Kesalahan Saat Memperbarui Dompet " .
+                        ($dompet->nama ?? ""),
                 );
         }
     }

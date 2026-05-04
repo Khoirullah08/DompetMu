@@ -194,10 +194,10 @@
                             <i class="fas {{ $wallet['icon'] }} {{ $wallet['icon_color'] }}"></i>
                         </div>
                         <div class="min-w-0">
-                            <p class="text-sm font-medium text-slate-500">{{ $wallet['name'] }}</p>
-                            <h3 class="mt-2 text-3xl font-bold leading-none tracking-tight text-slate-800">{{ $wallet['amount'] }}</h3>
+                            <p class="text-sm font-medium text-slate-500">{{ $wallet['nama'] }}</p>
+                            <h3 class="mt-2 text-3xl font-bold leading-none tracking-tight text-slate-800">{{ $wallet['total'] }}</h3>
                             <p class="mt-4 text-xs font-medium text-emerald-500">
-                                <i class="fas fa-arrow-trend-up mr-1"></i>{{ $wallet['change'] }}
+                                <i class="fas fa-arrow-trend-up mr-1"></i>{{ $wallet['updated_at'] }}
                             </p>
                         </div>
                     </div>
