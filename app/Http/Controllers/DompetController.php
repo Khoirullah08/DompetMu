@@ -102,10 +102,10 @@ class DompetController extends Controller
 
     public function delete($id)
     {
-        $nama = Dompet::where("id", $id)->get("nama");
+        $nama = Dompet::where("id", $id)->first();
         $dompet = Dompet::findOrFail($id)->delete();
         return redirect()
             ->route("dompet.index")
-            ->with("success", "berhasil menghapus dompet " . $nama);
+            ->with("success", "Berhasil Menghapus Dompet " . $nama->nama);
     }
 }
