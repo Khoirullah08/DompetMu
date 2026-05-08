@@ -4,7 +4,7 @@
         ['label' => 'Category', 'icon' => 'fa-folder', 'href' => route('category.index'), 'active' => request()->routeIs('category.*')],
         ['label' => 'Dompet', 'icon' => 'fa-wallet', 'href' => route('dompet.index'), 'active' => request()->routeIs('dompet.*')],
         ['label' => 'Transaksi', 'icon' => 'fa-right-left', 'href' => route('transaksi.index'), 'active' => request()->routeIs('transaksi.*')],
-        ['label' => 'Analisis', 'icon' => 'fa-chart-pie', 'href' => '#', 'active' => false],
+        ['label' => 'Analisis', 'icon' => 'fa-chart-pie', 'href' => route('analisis.index'), 'active' => request()->routeIs('analisis.*')],
     ];
 @endphp
 

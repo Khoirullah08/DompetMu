@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DompetController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\AnalisisController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -67,4 +68,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/update/{id}',[TransaksiController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [TransaksiController::class, 'destroy'])->name('delete');
     });
+
+    Route::prefix('analisis')->name('analisis.')->group(function () {
+        Route::get('/', [AnalisisController::class, 'index'])->name('index');
+    });
+
 });
