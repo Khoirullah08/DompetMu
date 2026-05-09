@@ -17,76 +17,97 @@ class AnalisisController extends Controller
         $bulan = $request->get('bulan', 'semua');
         $tahun = $request ->get('tahun', Carbon::now()->year);
 
-        $query = Transaksi::where("user_id", Auth::id())
-        ->whereYear('tanggal', $tahun);
+        $data = $this->getData($tahun, $bulan,);
 
-        if ($bulan !== 'semua') {
-            $query->whereMonth('tanggal', $bulan);
+            if ($request->ajax()) {
+            return response()->json($data);
         }
-
-        $transaksi = $query->get();
-
-        //summary 
-        $totalPemasukan = $transaksi->where('tipe', 'pemasukan')->sum('jumlah');
-        $totalPengeluaran = $transaksi->where('tipe', 'pengeluaran')->sum('jumlah');
-        $saldoBersih = $totalPemasukan - $totalPengeluaran;
-        
-        //income vs expense 
-        $bulanLabels = [];
-        $datapemassukan = [];
-        $datapengeluaran = [];
-
-       for ($m = 1; $m <= 12; $m++) {
-            $bulanLabels[]     = Carbon::create()->month($m)->locale('id')->monthName;
-            $dataPemasukan[]   = Transaksi::where('user_id', Auth::id())
-                ->whereYear('tanggal', $tahun)
-                ->whereMonth('tanggal', $m)
-                ->where('tipe', 'pemasukan')
-                ->sum('jumlah');
-            $dataPengeluaran[] = Transaksi::where('user_id', Auth::id())
-                ->whereYear('tanggal', $tahun)
-                ->whereMonth('tanggal', $m)
-                ->where('tipe', 'pengeluaran')
-                ->sum('jumlah');
-        }
-        $kategoriData = $transaksi->whereIn('tipe', ['pengeluaran', 'pemasukan'])
-            ->groupBy(fn($t) => $t->kategori->nama?? 'Lainnya')
-            ->map(fn($group) => $group->sum('jumlah'))
-            ->sortDesc();
-
-        $kategoriLabels = $kategoriData->keys()->Values()->toArray();
-        $kategoriValues = $kategoriData->values()->toArray();
-
-        // top kategori 
-        $topKategori = $kategoriData;
 
         // filter 
         $tahunPertama = Transaksi::where('user_id', Auth::id())->min('tanggal');
         $tahunAwal    = $tahunPertama ? Carbon::parse($tahunPertama)->year : now()->year;
         $daftarTahun  = range(now()->year, $tahunAwal);
 
-        // filter
-        if ($request->ajax()) {
-            return response()->json([
-                'totalPemasukan'   => $totalPemasukan,
-                'totalPengeluaran' => $totalPengeluaran,
-                'saldoBersih'      => $saldoBersih,
-                'dataPemasukan'    => array_values($dataPemasukan),
-                'dataPengeluaran'  => array_values($dataPengeluaran),
-                'bulanLabels'      => $bulanLabels,
-                'kategoriLabels'   => $kategoriLabels,
-                'kategoriValues'   => $kategoriValues,
-                'topKategori'      => $topKategori,
-            ]);
+          return view('analisis.index', array_merge($data, compact(
+            'title', 'subtitle', 'tahun', 'bulan', 'daftarTahun'
+        )));
+    }
+
+    private function getData($tahun, $bulan)
+    {
+    
+        $query = Transaksi::where('user_id', Auth::id())
+            ->whereYear('tanggal', $tahun);
+ 
+        if ($bulan !== 'semua') {
+            $query->whereMonth('tanggal', $bulan);
+        }
+ 
+        $transaksi = $query->with('kategori')->get();
+ 
+        // Summary 
+        $totalPemasukan   = $transaksi->where('tipe', 'pemasukan')->sum('jumlah');
+        $totalPengeluaran = $transaksi->where('tipe', 'pengeluaran')->sum('jumlah');
+        $saldoBersih      = $totalPemasukan - $totalPengeluaran;
+ 
+       
+        if ($bulan === 'semua') {
+            
+            $bulanLabels     = [];
+            $dataPemasukan   = [];
+            $dataPengeluaran = [];
+ 
+            for ($m = 1; $m <= 12; $m++) {
+                $bulanLabels[]     = Carbon::create()->month($m)->locale('id')->monthName;
+                $dataPemasukan[]   = (int) Transaksi::where('user_id', Auth::id())
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $m)
+                    ->where('tipe', 'pemasukan')
+                    ->sum('jumlah');
+                $dataPengeluaran[] = (int) Transaksi::where('user_id', Auth::id())
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $m)
+                    ->where('tipe', 'pengeluaran')
+                    ->sum('jumlah');
+            }
+        } else {
+            // filter bulan => minggu
+            $bulanLabels     = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
+            $dataPemasukan   = [0, 0, 0, 0];
+            $dataPengeluaran = [0, 0, 0, 0];
+ 
+            foreach ($transaksi as $t) {
+                $hari   = Carbon::parse($t->tanggal)->day;
+                $minggu = min((int) ceil($hari / 7), 4) - 1;
+ 
+                if ($t->tipe === 'pemasukan') {
+                    $dataPemasukan[$minggu] += $t->jumlah;
+                } else {
+                    $dataPengeluaran[$minggu] += $t->jumlah;
+                }
+            }
+ 
+            $dataPemasukan   = array_map('intval', $dataPemasukan);
+            $dataPengeluaran = array_map('intval', $dataPengeluaran);
         }
 
-        return view('analisis.index', compact(
-            'title', 'subtitle',
-            'tahun', 'bulan',
+
+        // pie chart kategori
+        $kategoriData = $transaksi->whereIn('tipe', ['pengeluaran', 'pemasukan'])
+            ->groupBy(fn($t) => optional($t->kategori)->nama ?? 'Lainnya')
+            ->map(fn($group) => $group->sum('jumlah'))
+            ->sortDesc();
+
+        $kategoriLabels = $kategoriData->keys()->values()->toArray();
+        $kategoriValues = $kategoriData->values()->map(fn($v) => (int) $v)->values()->toArray();
+
+        // top kategori 
+        $topKategori = $kategoriData;
+
+        return compact(
             'totalPemasukan', 'totalPengeluaran', 'saldoBersih',
             'bulanLabels', 'dataPemasukan', 'dataPengeluaran',
-            'kategoriLabels', 'kategoriValues',
-            'topKategori', 'daftarTahun'
-        ));
+            'kategoriLabels', 'kategoriValues', 'topKategori'
+        );
     }
 }
