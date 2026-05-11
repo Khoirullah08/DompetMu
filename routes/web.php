@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/store',     [TransaksiController::class, 'store'])->name('store');
         Route::get('/edit/{id}',  [TransaksiController::class, 'edit'])->name('edit');
         Route::put('/update/{id}',[TransaksiController::class, 'update'])->name('update');
+        Route::delete('/delete-bulk', [TransaksiController::class, 'bulkDestroy'])->name('bulk-destroy');
         Route::delete('/delete/{id}', [TransaksiController::class, 'destroy'])->name('delete');
     });
 
