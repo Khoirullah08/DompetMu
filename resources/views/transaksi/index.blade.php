@@ -92,73 +92,142 @@
                 <a href="{{ route('transaksi.create') }}" class="text-emerald-600 text-xs font-bold underline underline-offset-2">Tambah sekarang</a>
             </div>
         @else
-            <div class="bg-white rounded-[2rem] border border-gray-100">
-                <div class="overflow-x-auto rounded-[2rem]">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="bg-gray-50 border-b border-gray-100 text-gray-400 text-xs uppercase tracking-wider">
-                                <th class="px-6 py-4 text-left font-semibold">Tanggal</th>
-                                <th class="px-6 py-4 text-left font-semibold">Catatan</th>
-                                <th class="px-6 py-4 text-left font-semibold">Kategori</th>
-                                <th class="px-6 py-4 text-left font-semibold">Dompet</th>
-                                <th class="px-6 py-4 text-left font-semibold">Tipe</th>
-                                <th class="px-6 py-4 text-right font-semibold">Jumlah</th>
-                                <th class="px-6 py-4 text-center font-semibold">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-50">
-                            @foreach($transaksi as $t)
-                            <tr class="hover:bg-gray-50/60 transition-colors duration-150">
-                                <td class="px-6 py-4 text-gray-400 text-xs whitespace-nowrap">
-                                    {{ \Carbon\Carbon::parse($t->tanggal)->format('d M Y') }}
-                                </td>
-                                <td class="px-6 py-4 text-gray-800 font-semibold max-w-[220px] truncate">
-                                    {!! $t->catatan ?? '<span class="text-gray-300 font-normal italic">Tanpa catatan</span>' !!}
-                                </td>
-                                <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-                                    {{ $t->kategori->nama ?? '-' }}
-                                </td>
-                                <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-                                    {{ $t->dompet->nama ?? '-' }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    @if($t->tipe === 'pemasukan')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                            Pemasukan
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 border border-red-100 text-red-500 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
-                                            Pengeluaran
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 text-right font-black tracking-tight whitespace-nowrap {{ $t->tipe === 'pemasukan' ? 'text-emerald-600' : 'text-red-500' }}">
-                                    {{ $t->tipe === 'pemasukan' ? '+' : '-' }}Rp{{ number_format($t->jumlah, 0, ',', '.') }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-center gap-2">
-                                        <a href="{{ route('transaksi.edit', $t->id) }}"
-                                           class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-all">
-                                            <i class="fas fa-edit text-xs"></i>
-                                        </a>
-                                        <button onclick="openDeleteModal('{{ route('transaksi.delete', $t->id) }}')"
-                                                class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all">
-                                            <i class="fas fa-trash-alt text-xs"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+
+            {{-- ===== FORM BULK DELETE ===== --}}
+            <form id="bulkForm" method="POST" action="{{ route('transaksi.bulk-destroy') }}">
+                @csrf
+                @method('DELETE')
+
+                {{-- Bulk Toolbar (muncul saat ada yang dipilih) --}}
+                <div id="bulkToolbar"
+                     class="hidden mb-4 flex items-center gap-3 bg-red-50 border border-red-100 rounded-2xl px-5 py-3 transition-all">
+                    <i class="fas fa-trash-alt text-red-400 text-sm"></i>
+                    <span id="bulkCount" class="text-sm font-bold text-red-600">0 dipilih</span>
+                    <button type="button"
+                            onclick="openBulkDeleteModal()"
+                            class="ml-auto flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-95">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                        Hapus yang Dipilih
+                    </button>
+                    <button type="button"
+                            onclick="clearSelection()"
+                            class="flex items-center gap-1 text-xs text-red-400 hover:text-red-600 transition-colors">
+                        <i class="fas fa-times text-xs"></i>
+                        Batal
+                    </button>
                 </div>
-            </div>
+
+                <div class="bg-white rounded-[2rem] border border-gray-100">
+                    <div class="overflow-x-auto rounded-[2rem]">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50 border-b border-gray-100 text-gray-400 text-xs uppercase tracking-wider">
+                                    {{-- Checkbox Select All --}}
+                                    <th class="px-4 py-4 text-center w-10">
+                                        <input type="checkbox"
+                                               id="selectAll"
+                                               onchange="toggleSelectAll(this)"
+                                               class="w-4 h-4 rounded accent-red-500 cursor-pointer">
+                                    </th>
+                                    <th class="px-6 py-4 text-left font-semibold">Tanggal</th>
+                                    <th class="px-6 py-4 text-left font-semibold">Catatan</th>
+                                    <th class="px-6 py-4 text-left font-semibold">Kategori</th>
+                                    <th class="px-6 py-4 text-left font-semibold">Dompet</th>
+                                    <th class="px-6 py-4 text-left font-semibold">Tipe</th>
+                                    <th class="px-6 py-4 text-right font-semibold">Jumlah</th>
+                                    <th class="px-6 py-4 text-center font-semibold">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50">
+                                @foreach($transaksi as $t)
+                                <tr class="hover:bg-gray-50/60 transition-colors duration-150 row-item">
+                                    {{-- Checkbox per baris --}}
+                                    <td class="px-4 py-4 text-center">
+                                        <input type="checkbox"
+                                               name="ids[]"
+                                               value="{{ $t->id }}"
+                                               onchange="updateBulkToolbar()"
+                                               class="row-checkbox w-4 h-4 rounded accent-red-500 cursor-pointer">
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-400 text-xs whitespace-nowrap">
+                                        {{ \Carbon\Carbon::parse($t->tanggal)->format('d M Y') }}
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-800 font-semibold max-w-[220px] truncate">
+                                        {!! $t->catatan ?? '<span class="text-gray-300 font-normal italic">Tanpa catatan</span>' !!}
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                                        {{ $t->kategori->nama ?? '-' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                                        {{ $t->dompet->nama ?? '-' }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        @if($t->tipe === 'pemasukan')
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                Pemasukan
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 border border-red-100 text-red-500 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                                                Pengeluaran
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 text-right font-black tracking-tight whitespace-nowrap {{ $t->tipe === 'pemasukan' ? 'text-emerald-600' : 'text-red-500' }}">
+                                        {{ $t->tipe === 'pemasukan' ? '+' : '-' }}Rp{{ number_format($t->jumlah, 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <a href="{{ route('transaksi.edit', $t->id) }}"
+                                               class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-all">
+                                                <i class="fas fa-edit text-xs"></i>
+                                            </a>
+                                            <button onclick="openDeleteModal('{{ route('transaksi.delete', $t->id) }}')"
+                                                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all">
+                                                <i class="fas fa-trash-alt text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </form>
+            {{-- ===== END FORM BULK DELETE ===== --}}
+
         @endif
 
     </div>
 </main>
+
+{{-- Modal Konfirmasi Bulk Delete --}}
+<div id="bulkDeleteModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm mx-4 text-center">
+        <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 text-2xl mx-auto mb-4">
+            <i class="fas fa-trash-alt"></i>
+        </div>
+        <h3 class="text-lg font-black text-gray-900 mb-2">Hapus Transaksi?</h3>
+        <p class="text-sm text-gray-500 mb-6">
+            <span id="bulkModalCount" class="font-bold text-red-500"></span> transaksi akan dihapus dan saldo dompet akan dibalik. Tindakan ini tidak dapat dibatalkan.
+        </p>
+        <div class="flex gap-3">
+            <button type="button"
+                    onclick="closeBulkDeleteModal()"
+                    class="flex-1 py-3 rounded-2xl border border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all">
+                Batal
+            </button>
+            <button type="button"
+                    onclick="submitBulkDelete()"
+                    class="flex-1 py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-bold text-sm transition-all active:scale-95">
+                Ya, Hapus
+            </button>
+        </div>
+    </div>
+</div>
 
 @include('transaksi._delete')
 @endsection
@@ -166,6 +235,7 @@
 
 @section('scripts')
 <script>
+    // ===== DELETE SINGLE =====
     function openDeleteModal(actionUrl) {
         document.getElementById('deleteForm').action = actionUrl;
         document.getElementById('deleteModal').classList.remove('hidden');
@@ -176,6 +246,50 @@
         document.getElementById('deleteForm').action = '';
     }
 
+    // ===== BULK DELETE =====
+    function toggleSelectAll(source) {
+        document.querySelectorAll('.row-checkbox')
+            .forEach(cb => cb.checked = source.checked);
+        updateBulkToolbar();
+    }
+
+    function updateBulkToolbar() {
+        const checked = document.querySelectorAll('.row-checkbox:checked');
+        const toolbar  = document.getElementById('bulkToolbar');
+        const countEl  = document.getElementById('bulkCount');
+        const selectAll = document.getElementById('selectAll');
+        const total    = document.querySelectorAll('.row-checkbox').length;
+
+        countEl.textContent = checked.length + ' dipilih';
+        toolbar.classList.toggle('hidden', checked.length === 0);
+        toolbar.classList.toggle('flex', checked.length > 0);
+
+        // Atur state "select all" checkbox
+        selectAll.indeterminate = checked.length > 0 && checked.length < total;
+        selectAll.checked = checked.length === total;
+    }
+
+    function clearSelection() {
+        document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = false);
+        document.getElementById('selectAll').checked = false;
+        updateBulkToolbar();
+    }
+
+    function openBulkDeleteModal() {
+        const count = document.querySelectorAll('.row-checkbox:checked').length;
+        document.getElementById('bulkModalCount').textContent = count;
+        document.getElementById('bulkDeleteModal').classList.remove('hidden');
+    }
+
+    function closeBulkDeleteModal() {
+        document.getElementById('bulkDeleteModal').classList.add('hidden');
+    }
+
+    function submitBulkDelete() {
+        document.getElementById('bulkForm').submit();
+    }
+
+    // ===== TOAST =====
     function closeToast(id) {
         const toast = document.getElementById(id);
         if (toast) {
