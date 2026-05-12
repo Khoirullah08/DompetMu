@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Attributes\{Fillable, Hidden, Casts};
 
-#[Fillable(['name', 'email', 'role', 'password'])]
+#[Fillable(['name', 'email', 'role', 'password', 'bio', 'alamat', 'no_hp'])]
 #[Hidden(['password', 'remember_token'])]
 #[Casts([
     'email_verified_at' => 'datetime',

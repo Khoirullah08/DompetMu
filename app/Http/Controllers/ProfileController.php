@@ -23,7 +23,7 @@ class ProfileController extends Controller
             'name'   => ['required', 'string', 'max:255'],
             'alamat' => ['nullable', 'string', 'max:255'],
             'email'  => ['required', 'email', 'unique:users,email,' . Auth::id()],
-            'phone'  => ['nullable', 'string', 'max:20'],
+            'no_hp'  => ['nullable', 'string', 'max:15'],
             'bio'    => ['nullable', 'string', 'max:500'],
         ]);
 

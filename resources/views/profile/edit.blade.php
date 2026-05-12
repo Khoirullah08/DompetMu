@@ -219,9 +219,9 @@
 
           <div>
             <div class="field-label">No Telpon</div>
-            <input type="text" name="phone" class="form-input @error('phone') is-invalid @enderror"
-              value="{{ old('phone', auth()->user()->phone) }}" placeholder="No Telpon">
-            @error('phone')
+            <input type="text" name="no_hp" class="form-input @error('no_hp') is-invalid @enderror"
+              value="{{ old('no_hp', auth()->user()->no_hp) }}" placeholder="No Telpon">
+            @error('no_hp')
               <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
