@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DompetController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\AnalisisController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -46,7 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', [CategoryController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [CategoryController::class, 'update'])->name('update');
-        Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('delete');
+        Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('dompet')->name('dompet.')->group(function () {
@@ -65,6 +66,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/store',     [TransaksiController::class, 'store'])->name('store');
         Route::get('/edit/{id}',  [TransaksiController::class, 'edit'])->name('edit');
         Route::put('/update/{id}',[TransaksiController::class, 'update'])->name('update');
+        Route::delete('/delete-bulk', [TransaksiController::class, 'bulkDestroy'])->name('bulk-destroy');
         Route::delete('/delete/{id}', [TransaksiController::class, 'destroy'])->name('delete');
     });
-});

@@ -71,9 +71,10 @@
                     <a href="{{route('category.edit', $c->id)}}" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100">
                         <i class="fas fa-edit text-sm"></i>
                     </a>
-                    <button class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100">
+                  <button type="button" onclick="openDeleteModal('{{ route('category.destroy', $c->id) }}')"
+                        class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100">
                         <i class="fas fa-trash-alt text-sm"></i>
-                    </button>
+                </button>
                 </div>
 
                 <div class="absolute left-0 top-0 bottom-0 w-1 {{ $c->tipe == 'Pemasukan' ? 'bg-emerald-500' : 'bg-red-500' }} opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -89,7 +90,48 @@
         </div>
     </div>
 </main>
+
+@include('category._delete')
+
 @endsection
 
 @section('scripts')
+   <script>
+            function openDeleteModal(actionUrl) {
+                document.getElementById('deleteForm').action = actionUrl;
+                document.getElementById('deleteModal').classList.remove('hidden');
+            }
+
+            function closeDeleteModal() {
+                document.getElementById('deleteModal').classList.add('hidden');
+                document.getElementById('deleteForm').action = '';
+            }
+        </script>
+
+        <script>
+            function closeToast(id) {
+                const toast = document.getElementById(id);
+                if (toast) {
+                    toast.classList.remove('translate-x-0', 'opacity-100');
+                    toast.classList.add('translate-x-full', 'opacity-0');
+
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 500);
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const toasts = ['toast-success', 'toast-error', 'toast-validation'];
+
+                toasts.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        setTimeout(() => {
+                            closeToast(id);
+                        }, 4000);
+                    }
+                });
+            });
+        </script>
 @endsection

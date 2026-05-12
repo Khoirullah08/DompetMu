@@ -138,6 +138,7 @@ class TransaksiController extends Controller
     public function destroy($id)
         {
             $transaksi = Transaksi::where('id', $id)
+               // ->delete()
                 ->where('user_id', Auth::id())
                 ->firstOrFail();
 
@@ -158,4 +159,38 @@ class TransaksiController extends Controller
                 }
             return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
         }
+
+     public function bulkDestroy(Request $request)
+     {
+        $request->validate([
+            'ids'   => 'required|array|min:1',
+            'ids.*' => 'integer|exists:transaksi,id',
+        ]);
+
+        $transaksi = Transaksi::whereIn('id', $request->ids)
+            ->where('user_id', Auth::id())
+            ->get();
+
+        if ($transaksi->isEmpty()){
+            return redirect()->route('transaksi.index')->with('error', 'Transaksi tidak ditemukan.');
+        }
+
+        try {
+            DB::transaction(function ()use ($transaksi) {
+                foreach ($transaksi as $transaksi) {
+                if ($transaksi->tipe === 'pemasukan'){
+                    $transaksi->dompet->decrement('total', $transaksi->jumlah);
+                } else {
+                    $transaksi->dompet->increment('total', $transaksi->jumlah);
+                }
+                $transaksi->delete();
+                }
+            });
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus transaksi.');
+        }
+        return redirect()->route('transaksi.index')->with('success','Transaksi berhasil dihapus.');
+    }
 }

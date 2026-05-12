@@ -198,7 +198,7 @@
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
               <circle cx="12" cy="10" r="3"/>
             </svg>
-            {{ auth()->user()->city ?? '-' }}, {{ auth()->user()->country ?? '-' }}
+            {{ auth()->user()->alamat ?? 'Unknown Location' }}
           </div>
         </div>
       </div>
@@ -232,7 +232,7 @@
         </div>
         <div>
           <div class="field-label">No Telpon</div>
-          <div class="field-value">{{ auth()->user()->phone ?? '-' }}</div>
+          <div class="field-value">{{ auth()->user()->no_hp ?? '-' }}</div>
         </div>
         <div class="field-full">
           <div class="field-label">Bio</div>
