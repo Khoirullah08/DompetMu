@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', [CategoryController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [CategoryController::class, 'update'])->name('update');
-        Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('delete');
+        Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('dompet')->name('dompet.')->group(function () {
